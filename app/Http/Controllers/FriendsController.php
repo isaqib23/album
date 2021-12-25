@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Entities\Friend;
+use App\Http\Resources\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -86,5 +87,19 @@ class FriendsController extends BaseController
         $this->repository->delete($id);
 
         return $this->sendResponse([],"Friend Deleted");
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function myFriends(Request $request){
+        $friendIds = Friend::where([
+            "invited_by"       => $request->user_id,
+        ])->get();
+
+        $friends = \App\Models\User::whereIn("id",$friendIds->pluck("user_id"))->get();
+
+        return $this->sendResponse(User::collection($friends),"");
     }
 }
