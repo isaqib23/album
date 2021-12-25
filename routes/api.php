@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FriendsController;
 use App\Http\Controllers\InviteFriendsController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -49,4 +50,5 @@ Route::middleware('auth:api')->group( function () {
     Route::post('remove_post', [PostsController::class, 'destroy']);
     Route::post('get_posts', [PostsController::class, 'index']);
     Route::post('get_albums', [AlbumsController::class, 'index']);
+    Route::post('search_by_name', [UsersController::class, 'searchByName']);
 });
