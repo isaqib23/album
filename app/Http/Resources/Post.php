@@ -26,6 +26,7 @@ class Post extends JsonResource
             'albums' => $this->getAlbums($this),
             'created_by' => (integer)$this->created_by,
             'created_by_name' => (string)$this->createdBy->name,
+            'created_by_photo' => (string)$this->createdBy->photo,
             'created_at' => (string)$this->created_at
         ];
     }
