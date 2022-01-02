@@ -58,7 +58,7 @@ class AlbumsController extends BaseController
         $userAlbums = ($userAlbums->count() > 0) ? $userAlbums->pluck("id")->toArray() : [];
 
         $userAddedAlbums = AlbumFriend::where("user_id", \auth()->user()->id)->get();
-        $userAddedAlbums = ($userAddedAlbums->count() > 0) ? $userAlbums->pluck("album_id")->toArray() : [];
+        $userAddedAlbums = ($userAddedAlbums->count() > 0) ? $userAddedAlbums->pluck("album_id")->toArray() : [];
 
         $albumIds = array_merge($userAlbums, $userAddedAlbums);
 
