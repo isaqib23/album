@@ -22,6 +22,7 @@ class Post extends JsonResource
             'caption' => (string)$this->caption,
             'images' => $this->getImages($this),
             'likes' => (int)$this->postLikesCount($this),
+            'like_by_me' => (boolean)$this->likeByMe($this),
             'tags' => $this->tagsTransform($this),
             'albums' => $this->getAlbums($this),
             'created_by' => (integer)$this->created_by,
@@ -76,5 +77,17 @@ class Post extends JsonResource
      */
     private function postLikesCount($model){
         return PostLike::where("post_id", $model->id)->count();
+    }
+
+    /**
+     * @param $model
+     * @return bool
+     */
+    private function likeByMe($model){
+        $getLike = PostLike::where([
+            "post_id"   => $model->id,
+            "user_id"   => auth()->user()->id
+        ])->first();
+        return ($getLike) ? true : false;
     }
 }
