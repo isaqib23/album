@@ -6,6 +6,7 @@ use App\Entities\AlbumPost;
 use App\Entities\PostImage;
 use App\Entities\PostLike;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Laravelista\Comments\Comment;
 
 class Post extends JsonResource
 {
@@ -97,6 +98,6 @@ class Post extends JsonResource
      * @return mixed
      */
     private function postCommentsCount($model){
-        return PostLike::where("commentable_id", $model->id)->count();
+        return Comment::where("commentable_id", $model->id)->count();
     }
 }
