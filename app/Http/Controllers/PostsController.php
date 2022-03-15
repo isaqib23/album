@@ -453,4 +453,19 @@ class PostsController extends BaseController
 
         return $this->sendResponse(Post::make($post), "");
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getPostsGallery(Request $request){
+        $posts = $this->repository->findWhere([
+            "created_by"    => Auth::user()->id
+        ])->get();
+
+        $postIds = $posts->pluck("id")->toArray();
+        $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", $postIds);
+
+        return $this->sendResponse($images, "");
+    }
 }

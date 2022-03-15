@@ -52,4 +52,5 @@ Route::middleware('auth:api')->group( function () {
     Route::post('get_albums', [AlbumsController::class, 'index']);
     Route::post('search_by_name', [UsersController::class, 'searchByName']);
     Route::post('get_my_friends', [FriendsController::class, 'myFriends']);
+    Route::post('get_posts_gallery', [PostsController::class, 'getPostsGallery']);
 });
