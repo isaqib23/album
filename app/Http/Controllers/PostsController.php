@@ -461,7 +461,7 @@ class PostsController extends BaseController
     public function getPostsGallery(Request $request){
         $posts = $this->repository->findWhere([
             "created_by"    => Auth::user()->id
-        ])->get();
+        ]);
 
         $postIds = $posts->pluck("id")->toArray();
         $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", $postIds);
