@@ -86,7 +86,7 @@ class PostsController extends BaseController
 
         $albumIds = array_merge($userAlbums, $userAddedAlbums);
 
-        $posts = \App\Entities\Post::join('album_posts', 'post_id', '=', 'posts.id')
+        $posts = \App\Entities\Post::select("posts.*")->join('album_posts', 'post_id', '=', 'posts.id')
             ->whereIn("album_id", $albumIds)
             ->orderBy('posts.id', 'DESC')
             ->get();
