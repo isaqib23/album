@@ -478,4 +478,15 @@ class PostsController extends BaseController
         $resutls = $postResource->scopePopularTags();
         return $this->sendResponse($resutls, "");
     }
+
+    public function getAlbumGallery(Request $request){
+        $posts = $this->albumPostRepositoryEloquent->findWhere([
+            "album_id"    => $request->input("album_id")
+        ]);
+
+        $postIds = $posts->pluck("post_id")->toArray();
+        $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", $postIds);
+
+        return $this->sendResponse($images, "");
+    }
 }
