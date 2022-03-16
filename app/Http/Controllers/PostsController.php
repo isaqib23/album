@@ -474,7 +474,8 @@ class PostsController extends BaseController
      * @return JsonResponse
      */
     public function getTopTags(Request $request){
-        $resutls  = Post::scopePopularTags(null,null, 20);
+        $postResource = new Post();
+        $resutls = $postResource->scopePopularTags();
         return $this->sendResponse($resutls, "");
     }
 }

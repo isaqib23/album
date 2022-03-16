@@ -7,6 +7,7 @@ use App\Entities\PostImage;
 use App\Entities\PostLike;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 use Laravelista\Comments\Comment;
 
 class Post extends JsonResource
@@ -103,31 +104,23 @@ class Post extends JsonResource
     }
 
     /**
-     * @param Builder $query
-     * @param null $type
-     * @param null $limit
      * @return mixed
      */
-    public static function scopePopularTags(Builder $query, $type = null, $limit = null)
+    public function scopePopularTags()
     {
-        $query = "SELECT tags.* , COUNT(tags.id) AS tagged_count FROM tags tags LEFT JOIN taggables taggables ON tags.id = taggables.tag_id";
+        return DB::table('taggables')
+            ->selectRaw('name,slug, count(tag_id) as tagged_count')
+            ->join('tags', 'tags.id', '=', 'taggables.tag_id')
+            ->groupBy('tags.id')
+            ->orderBy('tagged_count', 'desc')
+            ->get()
 
-        $bindings = [];
-
-        if ($type) {
-            $query .= " WHERE tags.type = ?";
-            $bindings[] = $type;
-        }
-
-        $query .= " GROUP BY tags.id";
-
-        $query .= " ORDER BY tagged_count DESC";
-
-        if ($limit) {
-            $query .= " LIMIT ?";
-            $bindings[] = $limit;
-        }
-
-        return static::fromQuery($query, $bindings);
+            ->map(function($tag){
+                return [
+                    'name' => json_decode($tag->name)->es,
+                    'slug' => json_decode($tag->slug)->es,
+                    'count' => $tag->tagged_count
+                ];
+            });
     }
 }
