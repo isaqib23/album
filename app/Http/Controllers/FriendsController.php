@@ -71,8 +71,8 @@ class FriendsController extends BaseController
         }
 
         Friend::where([
-            "user_id"       => $request->user_id,
-            "invited_by"    => $request->user()->id
+            "user_id"       => $request->user()->id,
+            "invited_by"    => $request->user_id,
         ])->update(["status" => $request->status]);
 
         return $this->sendResponse([],"Inviitation ".ucfirst($request->status)." Successfully!");

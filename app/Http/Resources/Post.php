@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Entities\AlbumPost;
 use App\Entities\PostImage;
 use App\Entities\PostLike;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Laravelista\Comments\Comment;
 
@@ -99,5 +100,34 @@ class Post extends JsonResource
      */
     private function postCommentsCount($model){
         return Comment::where("commentable_id", $model->id)->count();
+    }
+
+    /**
+     * @param Builder $query
+     * @param null $type
+     * @param null $limit
+     * @return mixed
+     */
+    public static function scopePopularTags(Builder $query, $type = null, $limit = null)
+    {
+        $query = "SELECT tags.* , COUNT(tags.id) AS tagged_count FROM tags tags LEFT JOIN taggables taggables ON tags.id = taggables.tag_id";
+
+        $bindings = [];
+
+        if ($type) {
+            $query .= " WHERE tags.type = ?";
+            $bindings[] = $type;
+        }
+
+        $query .= " GROUP BY tags.id";
+
+        $query .= " ORDER BY tagged_count DESC";
+
+        if ($limit) {
+            $query .= " LIMIT ?";
+            $bindings[] = $limit;
+        }
+
+        return static::fromQuery($query, $bindings);
     }
 }

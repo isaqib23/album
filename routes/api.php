@@ -53,4 +53,5 @@ Route::middleware('auth:api')->group( function () {
     Route::post('search_by_name', [UsersController::class, 'searchByName']);
     Route::post('get_my_friends', [FriendsController::class, 'myFriends']);
     Route::post('get_posts_gallery', [PostsController::class, 'getPostsGallery']);
+    Route::post('get_top_tags', [PostsController::class, 'getTopTags']);
 });

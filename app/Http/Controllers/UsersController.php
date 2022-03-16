@@ -6,6 +6,7 @@ use App\Http\Resources\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -47,6 +48,7 @@ class UsersController extends BaseController
         $searchTerm = $request->input("keyword");
 
         $friends = \App\Models\User::query()
+            ->where("id","<>", Auth::user()->id)
             ->where('name', 'LIKE', "%{$searchTerm}%")
             ->orWhere('email', 'LIKE', "%{$searchTerm}%")
             ->get();
