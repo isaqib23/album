@@ -47,8 +47,8 @@ class Post extends Model implements Transformable
 
             ->map(function($tag){
                 return [
-                    'name' => json_decode($tag->name)->es,
-                    'slug' => json_decode($tag->slug)->es,
+                    'name' => json_decode($tag->name)->en,
+                    'slug' => json_decode($tag->slug)->en,
                     'count' => $tag->tagged_count
                 ];
             });
