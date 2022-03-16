@@ -102,25 +102,4 @@ class Post extends JsonResource
     private function postCommentsCount($model){
         return Comment::where("commentable_id", $model->id)->count();
     }
-
-    /**
-     * @return mixed
-     */
-    public function scopePopularTags()
-    {
-        return DB::table('taggables')
-            ->selectRaw('name,slug, count(tag_id) as tagged_count')
-            ->join('tags', 'tags.id', '=', 'taggables.tag_id')
-            ->groupBy('tags.id')
-            ->orderBy('tagged_count', 'desc')
-            ->get()
-
-            ->map(function($tag){
-                return [
-                    'name' => json_decode($tag->name)->es,
-                    'slug' => json_decode($tag->slug)->es,
-                    'count' => $tag->tagged_count
-                ];
-            });
-    }
 }
