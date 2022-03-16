@@ -476,6 +476,7 @@ class PostsController extends BaseController
     public function getTopTags(Request $request){
         $postResource = new Post();
         $resutls = $postResource->scopePopularTags();
+        dd($resutls);
         return $this->sendResponse($resutls, "");
     }
 }
