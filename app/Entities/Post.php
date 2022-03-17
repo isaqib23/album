@@ -53,4 +53,23 @@ class Post extends Model implements Transformable
                 ];
             });
     }
+
+    public function postsTags($ids)
+    {
+        return DB::table('taggables')
+            ->selectRaw('name,slug, count(tag_id) as tagged_count')
+            ->join('tags', 'tags.id', '=', 'taggables.tag_id')
+            ->whereIn("taggables.taggable_id", $ids)
+            ->groupBy('tags.id')
+            ->orderBy('tagged_count', 'desc')
+            ->get()
+
+            ->map(function($tag){
+                return [
+                    'name' => json_decode($tag->name)->en,
+                    'slug' => json_decode($tag->slug)->en,
+                    'count' => $tag->tagged_count
+                ];
+            });
+    }
 }

@@ -57,4 +57,20 @@ class AlbumPostRepositoryEloquent extends BaseRepository implements AlbumPostRep
 
         return true;
     }
+
+    public function storePostsToAlbum($album_id, $posts){
+        $data = [];
+        foreach ($posts as $value){
+            array_push($data,[
+                "post_id"  => $value,
+                "album_id"   => $album_id,
+                "created_at"    => date("Y-m-d H:i:s"),
+                "updated_at"    => date("Y-m-d H:i:s")
+            ]);
+        }
+
+        AlbumPost::insert($data);
+
+        return true;
+    }
 }

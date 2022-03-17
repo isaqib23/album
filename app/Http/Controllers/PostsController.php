@@ -489,4 +489,15 @@ class PostsController extends BaseController
 
         return $this->sendResponse($images, "");
     }
+
+    public function getAlbumTags(Request $request){
+        $posts = $this->albumPostRepositoryEloquent->findWhere([
+            "album_id"    => $request->input("album_id")
+        ]);
+
+        $postIds = $posts->pluck("post_id")->toArray();
+        $postResource = new \App\Entities\Post();
+        $resutls = $postResource->postsTags($postIds);
+        return $this->sendResponse($resutls, "");
+    }
 }

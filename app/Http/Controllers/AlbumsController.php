@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entities\AlbumFriend;
 use App\Http\Resources\Album;
 use App\Repositories\AlbumFriendRepositoryEloquent;
+use App\Repositories\AlbumPostRepositoryEloquent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -30,20 +31,27 @@ class AlbumsController extends BaseController
      * @var AlbumFriendRepositoryEloquent
      */
     private $albumFriendRepositoryEloquent;
+    /**
+     * @var AlbumPostRepositoryEloquent
+     */
+    private $albumPostRepositoryEloquent;
 
     /**
      * AlbumsController constructor.
      *
      * @param AlbumRepository $repository
      * @param AlbumFriendRepositoryEloquent $albumFriendRepositoryEloquent
+     * @param AlbumPostRepositoryEloquent $albumPostRepositoryEloquent
      */
     public function __construct(
         AlbumRepository $repository,
-        AlbumFriendRepositoryEloquent $albumFriendRepositoryEloquent
+        AlbumFriendRepositoryEloquent $albumFriendRepositoryEloquent,
+        AlbumPostRepositoryEloquent $albumPostRepositoryEloquent
     )
     {
         $this->repository = $repository;
         $this->albumFriendRepositoryEloquent = $albumFriendRepositoryEloquent;
+        $this->albumPostRepositoryEloquent = $albumPostRepositoryEloquent;
     }
 
     /**
@@ -104,6 +112,10 @@ class AlbumsController extends BaseController
         if($request->has('friends')) {
             // Add Album Friends
             $this->albumFriendRepositoryEloquent->store($album->id, $request->input('friends'));
+        }
+
+        if($request->has('post_ids')) {
+            $this->albumPostRepositoryEloquent->storePostsToAlbum($album->id, $request->input('post_ids'));
         }
 
         return $this->sendResponse(Album::make($album), "Album Created Successfully!");
