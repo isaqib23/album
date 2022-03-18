@@ -20,6 +20,6 @@ class Notification extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ["type","description","sender","receiver","taggable_id","status"];
 
 }
