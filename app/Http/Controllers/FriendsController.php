@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Entities\Friend;
 use App\Http\Resources\User;
+use App\Repositories\NotificationRepositoryEloquent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Repositories\FriendRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -22,17 +24,24 @@ class FriendsController extends BaseController
      * @var FriendRepository
      */
     protected $repository;
+    /**
+     * @var NotificationRepositoryEloquent
+     */
+    private $notificationRepositoryEloquent;
 
     /**
      * FriendsController constructor.
      *
      * @param FriendRepository $repository
+     * @param NotificationRepositoryEloquent $notificationRepositoryEloquent
      */
     public function __construct(
-        FriendRepository $repository
+        FriendRepository $repository,
+        NotificationRepositoryEloquent $notificationRepositoryEloquent
     )
     {
         $this->repository = $repository;
+        $this->notificationRepositoryEloquent = $notificationRepositoryEloquent;
     }
 
     /**
@@ -52,6 +61,14 @@ class FriendsController extends BaseController
             "user_id"       => $request->user_id,
             "invited_by"    => $request->user()->id
         ]);
+
+        // send Notification
+        $request->merge([
+            "type"          => "friend_request",
+            "description"   => Auth::user()->first_name." invited you as friend"
+        ]);
+
+        $this->notificationRepositoryEloquent->store($request,[$request->user_id]);
 
         return $this->sendResponse([],"User Invited Successfully!");
     }

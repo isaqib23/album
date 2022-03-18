@@ -34,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\AlbumPostRepository::class, \App\Repositories\AlbumPostRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\PostImageRepository::class, \App\Repositories\PostImageRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\PostLikeRepository::class, \App\Repositories\PostLikeRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\NotificationRepository::class, \App\Repositories\NotificationRepositoryEloquent::class);
         //:end-bindings:
     }
 }

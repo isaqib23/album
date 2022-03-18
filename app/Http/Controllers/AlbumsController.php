@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Entities\AlbumFriend;
+use App\Entities\Notification;
 use App\Http\Resources\Album;
 use App\Repositories\AlbumFriendRepositoryEloquent;
 use App\Repositories\AlbumPostRepositoryEloquent;
+use App\Repositories\NotificationRepositoryEloquent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Repositories\AlbumRepository;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -35,6 +38,10 @@ class AlbumsController extends BaseController
      * @var AlbumPostRepositoryEloquent
      */
     private $albumPostRepositoryEloquent;
+    /**
+     * @var NotificationRepositoryEloquent
+     */
+    private $notificationRepositoryEloquent;
 
     /**
      * AlbumsController constructor.
@@ -42,16 +49,19 @@ class AlbumsController extends BaseController
      * @param AlbumRepository $repository
      * @param AlbumFriendRepositoryEloquent $albumFriendRepositoryEloquent
      * @param AlbumPostRepositoryEloquent $albumPostRepositoryEloquent
+     * @param NotificationRepositoryEloquent $notificationRepositoryEloquent
      */
     public function __construct(
         AlbumRepository $repository,
         AlbumFriendRepositoryEloquent $albumFriendRepositoryEloquent,
-        AlbumPostRepositoryEloquent $albumPostRepositoryEloquent
+        AlbumPostRepositoryEloquent $albumPostRepositoryEloquent,
+        NotificationRepositoryEloquent $notificationRepositoryEloquent
     )
     {
         $this->repository = $repository;
         $this->albumFriendRepositoryEloquent = $albumFriendRepositoryEloquent;
         $this->albumPostRepositoryEloquent = $albumPostRepositoryEloquent;
+        $this->notificationRepositoryEloquent = $notificationRepositoryEloquent;
     }
 
     /**
@@ -112,6 +122,14 @@ class AlbumsController extends BaseController
         if($request->has('friends')) {
             // Add Album Friends
             $this->albumFriendRepositoryEloquent->store($album->id, $request->input('friends'));
+
+            $request->merge([
+                "type"          => "album_invitation",
+                "taggable_id"   => $album->id,
+                "description"   => Auth::user()->first_name." invited you join his album ".$album->name
+            ]);
+
+            $this->notificationRepositoryEloquent->store($request,$request->input('friends'));
         }
 
         if($request->has('post_ids')) {
@@ -184,6 +202,15 @@ class AlbumsController extends BaseController
         if($request->has('friends')) {
             // Add Album Friends
             $this->albumFriendRepositoryEloquent->store($album->id, $request->input('friends'));
+
+            $request->merge([
+                "type"          => "album_invitation",
+                "taggable_id"   => $album->id,
+                "description"   => Auth::user()->first_name." invited you join his album ".$album->name
+            ]);
+
+            Notification::where("taggable_id", $album->id)->delete();
+            $this->notificationRepositoryEloquent->store($request,$request->input('friends'));
         }
 
         return $this->sendResponse(Album::make($album), "Album Created Successfully!");

@@ -225,7 +225,7 @@ class AuthController extends BaseController
 
         $user = User::where("id", Auth::user()->id)->update($data);
 
-        return $this->sendResponse($user, 'Profile Updated');
+        return $this->sendResponse(Auth::user(), 'Profile Updated');
     }
 
     /**

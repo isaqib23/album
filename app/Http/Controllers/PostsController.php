@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Entities\Album;
 use App\Entities\AlbumFriend;
+use App\Entities\Notification;
 use App\Http\Resources\Post;
 use App\Repositories\AlbumPostRepositoryEloquent;
 use App\Repositories\PostImageRepositoryEloquent;
@@ -300,6 +301,17 @@ class PostsController extends BaseController
         $comment->approved = !Config::get('comments.approval_required');
         $comment->save();
 
+        if(Auth::user()->id != $comment->commentable->created_by) {
+            $request->merge([
+                "type" => "post_comment",
+                "taggable_id" => $request->commentable_id,
+                "description" => Auth::user()->first_name . " just commented on your post "
+            ]);
+
+            $this->notificationRepositoryEloquent->store($request, [Auth::user()->id]);
+        }
+
+
         return $this->sendResponse($comment, "Comment Added");
     }
 
@@ -326,6 +338,17 @@ class PostsController extends BaseController
         $getComment->update([
             'comment' => $request->message
         ]);
+
+        if(Auth::user()->id != $getComment->commentable->created_by) {
+            $request->merge([
+                "type" => "post_comment",
+                "taggable_id" => $getComment->commentable_id,
+                "description" => Auth::user()->first_name . " just commented on your post "
+            ]);
+
+            Notification::where("taggable_id", $getComment->commentable_id)->delete();
+            $this->notificationRepositoryEloquent->store($request, [Auth::user()->id]);
+        }
 
         return $this->sendResponse($getComment, "Comment Updated");
     }
