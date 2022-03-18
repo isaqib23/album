@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Psy\Util\Str;
 use Illuminate\Support\Facades\Hash;
 
@@ -184,5 +185,70 @@ class AuthController extends BaseController
         return response()->json([
             'message' => 'Successfully logged out'
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function update_profile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => [
+                'required',
+                Rule::unique('users')->ignore(Auth::user()->id),
+            ],
+            'dob' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $data = [
+            "name"      => $request->input("name"),
+            "email"      => $request->input("email"),
+            "dob"      => $request->input("dob")
+        ];
+
+        if($request->has("photo")) {
+            // Upload Image
+            $image = $request->photo;
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName = time() . '.' . 'png';
+            File::put(public_path() . '/img/' . $imageName, base64_decode($image));
+
+            $data["photo"] = url('/img/' . $imageName);
+        }
+
+        $user = User::where("id", Auth::user()->id)->update($data);
+
+        return $this->sendResponse($user, 'Profile Updated');
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|string|min:6|confirmed',
+            'password_confirmation' => 'required',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->with('error', 'Current password does not match!');
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return $this->sendResponse($user, 'Password successfully changed!');
     }
 }

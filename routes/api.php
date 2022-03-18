@@ -56,4 +56,6 @@ Route::middleware('auth:api')->group( function () {
     Route::post('get_top_tags', [PostsController::class, 'getTopTags']);
     Route::post('get_album_gallery', [PostsController::class, 'getAlbumGallery']);
     Route::post('get_album_tags', [PostsController::class, 'getAlbumTags']);
+    Route::post('update_profile', [AuthController::class, 'update_profile']);
+    Route::post('change_password', [AuthController::class, 'changePassword']);
 });
