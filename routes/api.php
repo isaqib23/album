@@ -4,6 +4,7 @@ use App\Http\Controllers\AlbumsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FriendsController;
 use App\Http\Controllers\InviteFriendsController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
@@ -58,4 +59,6 @@ Route::middleware('auth:api')->group( function () {
     Route::post('get_album_tags', [PostsController::class, 'getAlbumTags']);
     Route::post('update_profile', [AuthController::class, 'update_profile']);
     Route::post('change_password', [AuthController::class, 'changePassword']);
+    Route::post('get_notification', [NotificationsController::class, 'index']);
+    Route::post('update_notification_status', [NotificationsController::class, 'updateStatus']);
 });

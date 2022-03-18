@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Notification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -30,6 +31,15 @@ class NotificationsController extends BaseController
     )
     {
         $this->repository = $repository;
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function index(Request $request){
+        $response = Notification::get()->orderby("id","desc");
+        return $this->sendResponse($response,"Notification updated");
     }
 
     /**
