@@ -82,7 +82,10 @@ class PostsController extends BaseController
         $userAlbums = Album::where("created_by", \auth()->user()->id)->get();
         $userAlbums = ($userAlbums->count() > 0) ? $userAlbums->pluck("id")->toArray() : [];
 
-        $userAddedAlbums = AlbumFriend::where("user_id", \auth()->user()->id)->get();
+        $userAddedAlbums = AlbumFriend::where([
+            "user_id"   => Auth::user()->id,
+            "status"    => "accepted"
+        ])->get();
         $userAddedAlbums = ($userAddedAlbums->count() > 0) ? $userAddedAlbums->pluck("album_id")->toArray() : [];
 
         $albumIds = array_merge($userAlbums, $userAddedAlbums);

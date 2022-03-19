@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\AlbumFriend;
 use App\Entities\Friend;
 use App\Entities\Notification;
 use App\Repositories\FriendRepositoryEloquent;
@@ -67,9 +68,12 @@ class NotificationsController extends BaseController
                 "user_id"   => $result->receiver,
                 "invited_by"   => $result->sender,
             ])->update(["status" => $request->input("status")]);
-        }/*elseif ($result->type == "album_invitation"){
-
-        }*/
+        }elseif ($result->type == "album_invitation"){
+            AlbumFriend::where([
+                "user_id"   => $result->receiver,
+                "album_id"  => $result->taggable_id
+            ])->update(["status" => $request->input("status")]);
+        }
         return $this->sendResponse($result,"Notification updated");
     }
 }
