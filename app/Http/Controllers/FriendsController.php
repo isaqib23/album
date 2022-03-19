@@ -112,7 +112,7 @@ class FriendsController extends BaseController
      */
     public function myFriends(Request $request){
         $friendIds = Friend::where([
-            "invited_by"       => $request->user_id,
+            "invited_by"       => Auth::user()->id,
         ])->get();
 
         $friends = \App\Models\User::whereIn("id",$friendIds->pluck("user_id"))->get();
