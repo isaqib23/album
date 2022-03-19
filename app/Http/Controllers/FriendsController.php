@@ -112,12 +112,12 @@ class FriendsController extends BaseController
      */
     public function myFriends(Request $request){
         $friendIds = Friend::where([
-            "invited_by"       => 3434343,
+            "invited_by"       => Auth::user()->id,
         ])->orWhere([
-            "user_id"   => 43434343
+            "user_id"   => Auth::user()->id
         ])->get();
 
-        dd($friendIds);
+        dd($friendIds->count());
         $friends = \App\Models\User::whereIn("id",$friendIds->pluck("user_id"))->get();
 
         return $this->sendResponse(User::collection($friends),"");
