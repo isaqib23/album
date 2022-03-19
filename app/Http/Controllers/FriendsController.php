@@ -117,7 +117,7 @@ class FriendsController extends BaseController
             "user_id"   => 43434343
         ])->get();
 
-        dd($friendIds->count());
+        dd($friendIds);
         $friends = \App\Models\User::whereIn("id",$friendIds->pluck("user_id"))->get();
 
         return $this->sendResponse(User::collection($friends),"");
