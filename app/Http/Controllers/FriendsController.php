@@ -121,9 +121,9 @@ class FriendsController extends BaseController
         if($friendIds->count() > 0){
             $users = $friendIds->pluck("user_id");
             if(Auth::user()->id == $users[0]){
-                $friends = \App\Models\User::whereIn("id",$friendIds->pluck("user_id"))->get();
-            }else{
                 $friends = \App\Models\User::whereIn("id",$friendIds->pluck("invited_by"))->get();
+            }else{
+                $friends = \App\Models\User::whereIn("id",$friendIds->pluck("user_id"))->get();
             }
         }
 
