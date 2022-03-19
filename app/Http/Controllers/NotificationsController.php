@@ -47,7 +47,7 @@ class NotificationsController extends BaseController
      * @return JsonResponse
      */
     public function index(Request $request){
-        $response = Notification::orderBy("id","desc")->get();
+        $response = Notification::orderBy("id","desc")->where("status","sent")->get();
         return $this->sendResponse($response,"Notification updated");
     }
 

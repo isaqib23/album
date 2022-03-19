@@ -58,8 +58,8 @@ class FriendsController extends BaseController
         }
 
         $this->repository->create([
-            "user_id"       => $request->user_id,
-            "invited_by"    => $request->user()->id
+            "user_id"       => $request->input("user_id"),
+            "invited_by"    => Auth::user()->id
         ]);
 
         // send Notification
