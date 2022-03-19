@@ -53,7 +53,7 @@ class NotificationsController extends BaseController
         ]);
 
         $result = $this->repository->update(["type" => $request->input("status")],$request->input("notify_id"));
-
+        dd($result);
         return $this->sendResponse($result,"Notification updated");
     }
 }
