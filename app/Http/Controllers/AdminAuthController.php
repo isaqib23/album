@@ -132,6 +132,7 @@ class AdminAuthController extends Controller
 
         $albums = Album::get();
         $data["albums"] = \App\Http\Resources\Album::collection($albums);
+        dd($data);
         return view('albums',$data);
     }
 
