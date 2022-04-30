@@ -52,7 +52,7 @@
                                     <a href="{{url('/albums/user').'/'.$user->id}}" class="btn btn-sm btn-primary">
                                         <i class="fas fa-user"></i> View Albums
                                     </a>
-                                    <a href="href="{{url('/posts/user').'/'.$user->id}}"" class="btn btn-sm btn-primary">
+                                    <a href="{{url('/posts/user').'/'.$user->id}}" class="btn btn-sm btn-primary">
                                         <i class="fas fa-user"></i> View Posts
                                     </a>
                                 </div>
