@@ -41,9 +41,6 @@
                         <th style="width: 30%">
                             Post Caption
                         </th>
-                        <th>
-                            Created By
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -71,9 +68,6 @@
                                 <small>
                                     Created {{date('Y-m-d', strtotime($post->created_at))}}
                                 </small>
-                            </td>
-                            <td class="project-state">
-                                <span>{{$post->created_by_name}}</span>
                             </td>
                         </tr>
                     @endforeach

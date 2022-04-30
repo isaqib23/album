@@ -165,7 +165,7 @@ class AdminAuthController extends Controller
 
             if($request->segment(2) == 'album'){
                 $posts = \App\Entities\Post::select("posts.*")->join('album_posts', 'post_id', '=', 'posts.id')
-                    ->whereIn("album_id", $id)
+                    ->whereIn("album_id", [$id])
                     ->orderBy('posts.id', 'DESC')
                     ->get();
                 $data["posts"] = \App\Http\Resources\Post::collection($posts);

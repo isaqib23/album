@@ -41,9 +41,6 @@
                         <th style="width: 30%">
                             Album Name
                         </th>
-                        <th>
-                            Created By
-                        </th>
                         <th style="width: 20%">
                         </th>
                     </tr>
@@ -69,9 +66,6 @@
                                 <small>
                                     Created {{date('Y-m-d', strtotime($album->created_at))}}
                                 </small>
-                            </td>
-                            <td class="project-state">
-                                <span>{{$album->created_by_name}}</span>
                             </td>
                             <td class="project-actions text-right">
                                 <a class="btn btn-primary btn-sm" href="{{url('/users/album').'/'.$album->id}}">
