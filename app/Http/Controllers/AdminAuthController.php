@@ -126,14 +126,13 @@ class AdminAuthController extends Controller
 
             $albums = $this->repository->orderBy("id","desc")->findWhereIn("id",$albumIds);
             $data["albums"] = \App\Http\Resources\Album::collection($albums);
-            return view('albums',$data);
+            return view('albums',json_decode(json_encode($data["albums"])));
         }
 
 
         $albums = Album::get();
         $data["albums"] = \App\Http\Resources\Album::collection($albums);
-        dd(json_decode(json_encode($data["albums"]), true));
-        return view('albums',$data);
+        return view('albums',json_decode(json_encode($data["albums"])));
     }
 
     /**
@@ -160,7 +159,7 @@ class AdminAuthController extends Controller
                     ->orderBy('posts.id', 'DESC')
                     ->get();
                 $data["posts"] = \App\Http\Resources\Post::collection($posts);
-                return view('posts',$data);
+                return view('posts',json_decode(json_encode($data["posts"])));
             }
 
             if($request->segment(2) == 'album'){
@@ -169,11 +168,11 @@ class AdminAuthController extends Controller
                     ->orderBy('posts.id', 'DESC')
                     ->get();
                 $data["posts"] = \App\Http\Resources\Post::collection($posts);
-                return view('posts',$data);
+                return view('posts',json_decode(json_encode($data["posts"])));
             }
         }
         $posts = Post::get();
         $data["posts"] = \App\Http\Resources\Post::collection($posts);
-        return view('posts',$data);
+        return view('posts',json_decode(json_encode($data["posts"])));
     }
 }

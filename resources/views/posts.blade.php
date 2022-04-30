@@ -41,6 +41,9 @@
                         <th style="width: 30%">
                             Post Caption
                         </th>
+                        <th>
+                            Created By
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -51,8 +54,8 @@
                             </td>
                             <td>
                                 <ul class="list-inline">
-                                    @if($post->images)
-                                    @foreach($post->images as $img)
+                                    @if($post['images'])
+                                    @foreach($post['images'] as $img)
                                         <li class="list-inline-item">
                                             <img alt="Avatar" class="table-avatar" src="{{$img->image}}">
                                         </li>
@@ -62,12 +65,15 @@
                             </td>
                             <td>
                                 <a>
-                                    {{$post->name}}
+                                    {{$post['name']}}
                                 </a>
                                 <br/>
                                 <small>
-                                    Created {{date('Y-m-d', strtotime($post->created_at))}}
+                                    Created {{date('Y-m-d', strtotime($post['created_at']))}}
                                 </small>
+                            </td>
+                            <td class="project-state">
+                                <span>{{$post['created_by_name']}}</span>
                             </td>
                         </tr>
                     @endforeach
