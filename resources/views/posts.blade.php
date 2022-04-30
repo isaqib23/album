@@ -41,7 +41,7 @@
                         <th style="width: 30%">
                             Post Caption
                         </th>
-                        <th>
+                        <th style="text-align: center !important;">
                             Created By
                         </th>
                     </tr>

@@ -41,7 +41,7 @@
                         <th style="width: 30%">
                             Album Name
                         </th>
-                        <th>
+                        <th style="text-align: center !important;">
                             Created By
                         </th>
                         <th style="width: 20%">
@@ -57,29 +57,29 @@
                             <td>
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar" src="{{$album['cover_image']}}">
+                                        <img alt="Avatar" class="table-avatar" src="{{$album->cover_image}}">
                                     </li>
                                 </ul>
                             </td>
                             <td>
                                 <a>
-                                    {{$album['name']}}
+                                    {{$album->name}}
                                 </a>
                                 <br/>
                                 <small>
-                                    Created {{date('Y-m-d', strtotime($album['created_at']))}}
+                                    Created {{date('Y-m-d', strtotime($album->created_at))}}
                                 </small>
                             </td>
                             <td class="project-state">
-                                <span>{{$album['created_by_name']}}</span>
+                                <span>{{$album->created_by_name}}</span>
                             </td>
                             <td class="project-actions text-right">
-                                <a class="btn btn-primary btn-sm" href="{{url('/users/album').'/'.$album['id']}}">
+                                <a class="btn btn-primary btn-sm" href="{{url('/users/album').'/'.$album->id}}">
                                     <i class="fas fa-folder">
                                     </i>
                                     View Friends
                                 </a>
-                                <a class="btn btn-primary btn-sm" href="{{url('/posts/album').'/'.$album['id']}}">
+                                <a class="btn btn-primary btn-sm" href="{{url('/posts/album').'/'.$album->id}}">
                                     <i class="fas fa-folder">
                                     </i>
                                     View Posts
