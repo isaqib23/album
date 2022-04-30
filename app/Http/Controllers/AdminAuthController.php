@@ -134,6 +134,7 @@ class AdminAuthController extends Controller
         $albums = Album::get();
         $collection = \App\Http\Resources\Album::collection($albums);
         $data["albums"] = json_decode(json_encode($collection));
+        dd($data);
         return view('albums',$data);
     }
 
