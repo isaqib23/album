@@ -24,6 +24,7 @@ class Album extends JsonResource
             'name' => (string)$this->name,
             'cover_image' => (string)$this->cover_image,
             'created_by' => (integer)$this->created_by,
+            'created_at' => (string)$this->created_at,
             'created_by_name' => (string)$this->createdBy->name,
             'post_count' => (integer)$this->postsCount($this),
             'friend_count' => $this->getFriends($this)->count(),
