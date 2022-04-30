@@ -6,6 +6,7 @@ use App\Entities\Album;
 use App\Entities\AlbumFriend;
 use App\Entities\Post;
 use App\Models\User;
+use App\Repositories\AlbumRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\Factory;
@@ -17,6 +18,21 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminAuthController extends Controller
 {
+    /**
+     * @var AlbumRepository
+     */
+    private $repository;
+
+    /**
+     * AdminAuthController constructor.
+     * @param AlbumRepository $repository
+     */
+    public function __construct(
+        AlbumRepository $repository
+    ){
+        $this->repository = $repository;
+    }
+
     /**
      * @return Application|Factory|View
      */
