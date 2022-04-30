@@ -65,7 +65,7 @@
                             </td>
                             <td>
                                 <a>
-                                    {{$post->name}}
+                                    {{$post->caption}}
                                 </a>
                                 <br/>
                                 <small>
