@@ -50,6 +50,7 @@ class NotificationRepositoryEloquent extends BaseRepository implements Notificat
                 "type"          => $request->input("type"),
                 "sender"        => Auth::user()->id,
                 "receiver"      => $user,
+                "taggable_id"   => ($request->has("taggable_id")) ? $request->input("taggable_id") : null,
                 "description"   => $request->input("description")
             ]);
         }

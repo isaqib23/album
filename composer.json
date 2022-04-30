@@ -12,6 +12,7 @@
         "laravel/passport": "^10.2",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "laravel/ui": "^3.4",
         "laravelista/comments": "^4.5",
         "prettus/l5-repository": "^2.7",
         "spatie/laravel-tags": "^3.1"

@@ -8,13 +8,16 @@ use App\Mail\ConfirmationEmail;
 use App\Mail\ForgotPasswordEmail;
 use App\Models\User;
 use Carbon\Carbon;
+use DB;
 use File;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -120,7 +123,7 @@ class AuthController extends BaseController
 
         $token = \Illuminate\Support\Str::random(64);
 
-        \DB::table('password_resets')->insert([
+        DB::table('password_resets')->insert([
             'email' => $request->email,
             'token' => $token,
             'created_at' => Carbon::now()
@@ -144,7 +147,7 @@ class AuthController extends BaseController
             'password_confirmation' => 'required'
         ]);
 
-        $updatePassword = \DB::table('password_resets')
+        $updatePassword = DB::table('password_resets')
             ->where([
                 'email' => $request->email,
                 'token' => $request->token
@@ -158,7 +161,7 @@ class AuthController extends BaseController
         User::where('email', $request->email)
             ->update(['password' => Hash::make($request->password)]);
 
-        \DB::table('password_resets')->where(['email'=> $request->email])->delete();
+        DB::table('password_resets')->where(['email'=> $request->email])->delete();
 
         return back()->with('message', 'Your password has been changed!');
     }
