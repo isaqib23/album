@@ -54,11 +54,13 @@
                             </td>
                             <td>
                                 <ul class="list-inline">
+                                    @if($post->images)
                                     @foreach($post->images as $img)
                                         <li class="list-inline-item">
                                             <img alt="Avatar" class="table-avatar" src="{{$img->image}}">
                                         </li>
                                     @endforeach
+                                    @endif
                                 </ul>
                             </td>
                             <td>
