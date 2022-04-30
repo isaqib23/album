@@ -67,7 +67,7 @@
                                 </a>
                                 <br/>
                                 <small>
-                                    Created {{date_format('Y-m-d', strtotime($post->created_at))}}
+                                    Created {{date('Y-m-d', strtotime($post->created_at))}}
                                 </small>
                             </td>
                             <td class="project-state">
