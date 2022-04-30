@@ -126,15 +126,15 @@ class AdminAuthController extends Controller
 
             $albums = $this->repository->orderBy("id","desc")->findWhereIn("id",$albumIds);
             $collection = \App\Http\Resources\Album::collection($albums);
-            $data["albums"] = $collection;
-            return view('albums',json_decode(json_encode($data["albums"])));
+            $data["albums"] = json_decode(json_encode($collection));
+            return view('albums',$data["albums"]);
         }
 
 
         $albums = Album::get();
         $collection = \App\Http\Resources\Album::collection($albums);
-        $data["albums"] = $collection;
-        return view('albums',json_decode(json_encode($data["albums"])));
+        $data["albums"] = json_decode(json_encode($collection));
+        return view('albums',$data["albums"]);
     }
 
     /**
@@ -161,8 +161,8 @@ class AdminAuthController extends Controller
                     ->orderBy('posts.id', 'DESC')
                     ->get();
                 $collection = \App\Http\Resources\Post::collection($posts);
-                $data["posts"] = $collection;
-                return view('posts',json_decode(json_encode($data["posts"])));
+                $data["posts"] = json_decode(json_encode($collection));
+                return view('posts',$data["posts"]);
             }
 
             if($request->segment(2) == 'album'){
@@ -171,13 +171,13 @@ class AdminAuthController extends Controller
                     ->orderBy('posts.id', 'DESC')
                     ->get();
                 $collection = \App\Http\Resources\Post::collection($posts);
-                $data["posts"] = $collection;
-                return view('posts',json_decode(json_encode($data["posts"])));
+                $data["posts"] = json_decode(json_encode($collection));
+                return view('posts',$data["posts"]);
             }
         }
         $posts = Post::get();
         $collection = \App\Http\Resources\Post::collection($posts);
-        $data["posts"] = $collection;
-        return view('posts',json_decode(json_encode($data["posts"])));
+        $data["posts"] = json_decode(json_encode($collection));
+        return view('posts',$data["posts"]);
     }
 }
