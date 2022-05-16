@@ -68,13 +68,13 @@ class AuthController extends BaseController
         }
 
         // Send Confirmation Email
-        User::where("id",$user->id)->update(["status" => "active", "email_verified_at" => date("Y-m-d H:i:s")]);
-        /*$emailBody = [
+        User::where("id",$user->id)->update(["status" => "pending", "email_verified_at" => date("Y-m-d H:i:s")]);
+        $emailBody = [
             "name"      => $user->name,
             "url"       => url('/confirmation_email/'.base64_encode($user->id))
         ];
         Mail::to($user->email)->send(new ConfirmationEmail($emailBody));
-        */
+
         return $this->sendResponse([], 'Your account successfully created! Please check your email for confirmation');
     }
 
