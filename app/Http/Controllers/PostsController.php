@@ -197,7 +197,7 @@ class PostsController extends BaseController
             foreach ($request->cover_image as $key => $image) {
                 $image = str_replace('data:image/png;base64,', '', $image);
                 $image = str_replace(' ', '+', $image);
-                $imageName = time() . '.' . 'png';
+                $imageName = Str::random(30) . '.' . 'png';
                 File::put(public_path() . '/img/' . $imageName, base64_decode($image));
                 array_push($images, url('/img/' . $imageName));
             }
