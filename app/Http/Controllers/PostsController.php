@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Laravelista\Comments\Comment;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -122,7 +123,7 @@ class PostsController extends BaseController
         foreach ($request->cover_image as $key => $image) {
             $image = str_replace('data:image/png;base64,', '', $image);
             $image = str_replace(' ', '+', $image);
-            $imageName = time() . '.' . 'png';
+            $imageName = Str::random(30) . '.' . 'png';
             File::put(public_path() . '/img/' . $imageName, base64_decode($image));
             array_push($images,url('/img/'.$imageName));
         }
