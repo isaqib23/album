@@ -17,6 +17,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
@@ -111,7 +112,7 @@ class AlbumsController extends BaseController
         $image = $request->cover_image;
         $image = str_replace('data:image/png;base64,', '', $image);
         $image = str_replace(' ', '+', $image);
-        $imageName = time().'.'.'png';
+        $imageName = Str::random(25).'.'.'png';
         File::put(public_path().'/img/'. $imageName, base64_decode($image));
 
         $input = [
@@ -195,7 +196,7 @@ class AlbumsController extends BaseController
             $image = $request->cover_image;
             $image = str_replace('data:image/png;base64,', '', $image);
             $image = str_replace(' ', '+', $image);
-            $imageName = time() . '.' . 'png';
+            $imageName = Str::random(25) . '.' . 'png';
             File::put(public_path() . '/img/' . $imageName, base64_decode($image));
             $input["cover_image"] = url('/img/'.$imageName);
         }
