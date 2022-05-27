@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Repositories\NotificationRepository;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class NotificationsController.
@@ -57,10 +58,14 @@ class NotificationsController extends BaseController
      * @return JsonResponse
      */
     public function updateStatus(Request $request){
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'status' => 'required|string',
             'notify_id' => 'required|string'
         ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors()->first(), $validator->errors());
+        }
 
         $result = $this->repository->update(["status" => $request->input("status")],$request->input("notify_id"));
         if($result->type == "friend_request"){

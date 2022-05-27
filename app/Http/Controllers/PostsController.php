@@ -94,7 +94,7 @@ class PostsController extends BaseController
         $posts = \App\Entities\Post::select("posts.*")->join('album_posts', 'post_id', '=', 'posts.id')
             ->whereIn("album_id", $albumIds)
             ->orderBy('posts.id', 'DESC')
-            ->get();
+            ->distinct()->get();
 
         return $this->sendResponse(Post::collection($posts),"");
     }
@@ -115,7 +115,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         // Upload Image
@@ -162,7 +162,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $album = $this->repository->findWhere([
@@ -188,7 +188,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         if ($request->has('cover_image')) {
@@ -238,7 +238,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $this->repository->delete($request->post_id);
@@ -257,7 +257,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $check = $this->postLikeRepositoryEloquent->findWhere([
@@ -290,7 +290,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $model = \App\Entities\Post::findOrFail($request->commentable_id);
@@ -334,7 +334,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $getComment = $comment->where("id", $request->comment_id)->first();
@@ -369,7 +369,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $comment = new Comment();
@@ -398,7 +398,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $comment = new Comment();
@@ -426,7 +426,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
         $post = \App\Entities\Post::where("id", $request->post_id)->first();
 
@@ -445,7 +445,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $post = $this->repository->findWhere([
@@ -469,7 +469,7 @@ class PostsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $post = $this->repository->findWhere([

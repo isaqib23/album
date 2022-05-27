@@ -54,7 +54,7 @@ class FriendsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $this->repository->create([
@@ -84,7 +84,7 @@ class FriendsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         Friend::where([

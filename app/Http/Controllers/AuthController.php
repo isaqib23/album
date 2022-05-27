@@ -42,7 +42,7 @@ class AuthController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         // Upload Image
@@ -117,9 +117,13 @@ class AuthController extends BaseController
      * @return JsonResponse
      */
     public function forgotPassword(Request $request){
-        $request->validate([
-            'email' => 'required|email|exists:users',
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users'
         ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors()->first(), $validator->errors());
+        }
 
         $token = \Illuminate\Support\Str::random(64);
 
@@ -142,10 +146,14 @@ class AuthController extends BaseController
     }
 
     public function submit_forgot_password(Request $request){
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'password' => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required'
         ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors()->first(), $validator->errors());
+        }
 
         $updatePassword = DB::table('password_resets')
             ->where([
@@ -206,7 +214,7 @@ class AuthController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $data = [
@@ -237,11 +245,15 @@ class AuthController extends BaseController
      */
     public function changePassword(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'current_password' => 'required',
             'password' => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required',
         ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors()->first(), $validator->errors());
+        }
 
         $user = Auth::user();
 

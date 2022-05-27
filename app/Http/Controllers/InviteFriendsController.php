@@ -45,6 +45,10 @@ class InviteFriendsController extends BaseController
             'email' => 'required|email|unique:users'
         ]);
 
+        if($validator->fails()){
+            return $this->sendError($validator->errors()->first(), $validator->errors());
+        }
+
         if (InviteFriend::where('email', $request->input('email'))->exists()) {
             return $this->sendError('User already invited with this email!');
         }

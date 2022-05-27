@@ -105,7 +105,7 @@ class AlbumsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         // Upload Image
@@ -156,7 +156,7 @@ class AlbumsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $album = $this->repository->findWhere([
@@ -184,7 +184,7 @@ class AlbumsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $input = [
@@ -245,7 +245,7 @@ class AlbumsController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError($validator->errors()->first(), $validator->errors());
         }
 
         $friendIds = AlbumFriend::where([
