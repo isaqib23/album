@@ -94,7 +94,7 @@ class AuthController extends BaseController
             }
 
             $user->_token =  $user->createToken('MyApp')-> accessToken;
-            User::where()->update([
+            User::where("id",$user->id)->update([
                 "device_UUID"   => $request->device_UUID,
                 "device_type"   => strtolower($request->device_type),
             ]);
