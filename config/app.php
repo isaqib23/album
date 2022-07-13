@@ -163,6 +163,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         \App\Providers\RepositoryServiceProvider::class,
+        Berkayk\OneSignal\OneSignalServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -230,7 +231,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class
     ],
 
 ];

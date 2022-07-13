@@ -55,6 +55,9 @@ class AuthController extends BaseController
         $request->merge(["photo" => url('/img/'.$imageName)]);
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
+        $input["device_UUID"]   = $request->device_UUID;
+        $input["device_type"]   = strtolower($request->device_type);
+
         $user = User::create($input);
 
         // Check invitation
@@ -91,7 +94,10 @@ class AuthController extends BaseController
             }
 
             $user->_token =  $user->createToken('MyApp')-> accessToken;
-
+            User::where()->update([
+                "device_UUID"   => $request->device_UUID,
+                "device_type"   => strtolower($request->device_type),
+            ]);
             return $this->sendResponse($user, 'User login successfully.');
         }else{
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);

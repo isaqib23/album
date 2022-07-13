@@ -50,6 +50,8 @@ class NotificationsController extends BaseController
      */
     public function index(Request $request){
         $response = Notification::orderBy("id","desc")->where("status","sent")->get();
+        $user = auth()->user()->device_UUID;
+        sendPushNotification($user,'Test');
         return $this->sendResponse($response,"Notification updated");
     }
 
