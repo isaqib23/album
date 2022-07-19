@@ -55,8 +55,7 @@ class AuthController extends BaseController
         $request->merge(["photo" => url('/img/'.$imageName)]);
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $input["device_UUID"]   = $request->device_UUID;
-        $input["device_type"]   = strtolower($request->device_type);
+        $input["device_UUID"]   = " ";
 
         $user = User::create($input);
 
