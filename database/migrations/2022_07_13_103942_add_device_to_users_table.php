@@ -27,7 +27,7 @@ class AddDeviceToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('device_UUID');
+            $table->dropColumn('device_UUID')->nullable();
             $table->dropColumn('device_type');
         });
     }

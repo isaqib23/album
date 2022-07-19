@@ -119,11 +119,15 @@ class FriendsController extends BaseController
 
         $friends = [];
         if($friendIds->count() > 0){
-            $users = $friendIds->pluck("user_id");
-            if(Auth::user()->id == $users[0]){
-                $friends = \App\Models\User::whereIn("id",$friendIds->pluck("invited_by"))->get();
-            }else{
-                $friends = \App\Models\User::whereIn("id",$friendIds->pluck("user_id"))->get();
+            foreach ($friendIds as $key => $value){
+                if(Auth::user()->id == $value->user_id){
+                    $fri = \App\Models\User::whereIn("id",$value->invited_by)->first();
+                    array_push($friends, $fri);
+                }
+                if(Auth::user()->id == $value->invited_by && $value->status == "accepted"){
+                    $fri1 = \App\Models\User::whereIn("id",$value->user_id)->first();
+                    array_push($friends, $fri1);
+                }
             }
         }
 
