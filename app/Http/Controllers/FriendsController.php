@@ -65,9 +65,11 @@ class FriendsController extends BaseController
         // send Notification
         $request->merge([
             "type"          => "friend_request",
-            "description"   => Auth::user()->first_name." invited you as friend"
+            "description"   => Auth::user()->name." invited you as friend"
         ]);
 
+        $user = \App\Models\User::where("id",$request->input("user_id"))->first();
+        sendPushNotification($user->device_UUID,env("FRIEND_INVITATION"));
         $this->notificationRepositoryEloquent->store($request,[$request->user_id]);
 
         return $this->sendResponse([],"User Invited Successfully!");

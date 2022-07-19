@@ -309,8 +309,11 @@ class PostsController extends BaseController
             $request->merge([
                 "type" => "post_comment",
                 "taggable_id" => $request->commentable_id,
-                "description" => Auth::user()->first_name . " just commented on your post "
+                "description" => Auth::user()->name . " just commented on your post "
             ]);
+
+            $user = \App\Models\User::where("id", $request->commentable_id)->first();
+            sendPushNotification($user->device_UUID, env("COMMENT_INVITATION"));
 
             $this->notificationRepositoryEloquent->store($request, [Auth::user()->id]);
         }

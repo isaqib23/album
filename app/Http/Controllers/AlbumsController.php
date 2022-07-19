@@ -130,7 +130,7 @@ class AlbumsController extends BaseController
             $request->merge([
                 "type"          => "album_invitation",
                 "taggable_id"   => $album->id,
-                "description"   => Auth::user()->first_name." invited you join his album ".$album->name
+                "description"   => Auth::user()->name." invited you join his album ".$album->name
             ]);
 
             $this->notificationRepositoryEloquent->store($request,$request->input('friends'));
