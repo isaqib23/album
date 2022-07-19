@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Repositories\NotificationRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -49,7 +50,7 @@ class NotificationsController extends BaseController
      * @return JsonResponse
      */
     public function index(Request $request){
-        $response = Notification::orderBy("id","desc")->get();
+        $response = Notification::orderBy("id","desc")->where("receiver",Auth::user()->id)->get();
         //$user = auth()->user()->device_UUID;
         //sendPushNotification($user,'5e2a485c-df58-42e1-81d4-2b70e37fa964');
         return $this->sendResponse($response,"Notification updated");
