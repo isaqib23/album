@@ -121,11 +121,11 @@ class FriendsController extends BaseController
         if($friendIds->count() > 0){
             foreach ($friendIds as $key => $value){
                 if(Auth::user()->id == $value->user_id){
-                    $fri = \App\Models\User::whereIn("id",$value->invited_by)->first();
+                    $fri = \App\Models\User::where("id",$value->invited_by)->first();
                     array_push($friends, $fri);
                 }
                 if(Auth::user()->id == $value->invited_by && $value->status == "accepted"){
-                    $fri1 = \App\Models\User::whereIn("id",$value->user_id)->first();
+                    $fri1 = \App\Models\User::where("id",$value->user_id)->first();
                     array_push($friends, $fri1);
                 }
             }
