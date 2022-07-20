@@ -508,10 +508,19 @@ class PostsController extends BaseController
             ->orderBy('posts.id', 'DESC')
             ->distinct()->get();
 
-        $postIds = $posts->pluck("id")->toArray();
-        $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", $postIds);
+        $response = [];
+        foreach ($posts as $post){
+            $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", [$post->id]);
+            if($images){
+                foreach($images as $key => $img){
+                    $imgs = $img->toArray();
+                    $imgs["tags"] = $post->tags->pluck("id")->toArray();
+                    array_push($response,$imgs);
+                }
+            }
+        }
 
-        return $this->sendResponse($images, "");
+        return $this->sendResponse($response, "");
     }
 
     /**
