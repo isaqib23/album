@@ -47,8 +47,8 @@ class NotificationRepositoryEloquent extends BaseRepository implements Notificat
     public function store($request, $users){
         foreach ($users as $user){
             if($request->input("type") == "album_invitation") {
-                $user = \App\Models\User::where("id", $user)->first();
-                sendPushNotification($user->device_UUID, env("ALBUM_INVITATION"));
+                $use = \App\Models\User::where("id", $user)->first();
+                sendPushNotification($use->device_UUID, env("ALBUM_INVITATION"));
             }
             Notification::create([
                 "type"          => $request->input("type"),
