@@ -508,19 +508,10 @@ class PostsController extends BaseController
             ->orderBy('posts.id', 'DESC')
             ->distinct()->get();
 
-        $response = [];
-        foreach ($posts as $post){
-            $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", [$post->id]);
-            if($images){
-                foreach($images as $key => $img){
-                    $imgs = $img->toArray();
-                    $imgs["tags"] = $post->tags->pluck("id")->toArray();
-                    array_push($response,$imgs);
-                }
-            }
-        }
+        $postIds = $posts->pluck("id")->toArray();
+        $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", $postIds);
 
-        return $this->sendResponse($response, "");
+        return $this->sendResponse($images, "");
     }
 
     /**
@@ -553,5 +544,13 @@ class PostsController extends BaseController
         $postResource = new \App\Entities\Post();
         $resutls = $postResource->postsTags($postIds);
         return $this->sendResponse($resutls, "");
+    }
+
+    public function getTagsGallary(Request $request){
+        $posts = Post::withAnyTags($request->input("tags"));
+        $postIds = $posts->pluck("id")->toArray();
+        $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", $postIds);
+
+        return $this->sendResponse($images, "");
     }
 }

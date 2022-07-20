@@ -61,4 +61,5 @@ Route::middleware('auth:api')->group( function () {
     Route::post('change_password', [AuthController::class, 'changePassword']);
     Route::post('get_notification', [NotificationsController::class, 'index']);
     Route::post('update_notification_status', [NotificationsController::class, 'updateStatus']);
+    Route::post('get_tags_gallary', [PostsController::class, 'getTagsGallary']);
 });
