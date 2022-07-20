@@ -271,6 +271,9 @@ class PostsController extends BaseController
                 "user_id"   => auth()->user()->id
             ]);
         }else {
+            $pos = \App\Entities\Post::where("id", $request->input("post_id"))->first();
+            $use = \App\Models\User::where("id", $pos->id)->first();
+            sendPushNotification($use->device_UUID, env("POST_LIKE"));
             $this->postLikeRepositoryEloquent->store($request);
         }
 
@@ -489,9 +492,21 @@ class PostsController extends BaseController
      * @return JsonResponse
      */
     public function getPostsGallery(Request $request){
-        $posts = $this->repository->findWhere([
-            "created_by"    => Auth::user()->id
-        ]);
+        $userAlbums = Album::where("created_by", \auth()->user()->id)->get();
+        $userAlbums = ($userAlbums->count() > 0) ? $userAlbums->pluck("id")->toArray() : [];
+
+        $userAddedAlbums = AlbumFriend::where([
+            "user_id"   => Auth::user()->id,
+            "status"    => "accepted"
+        ])->get();
+        $userAddedAlbums = ($userAddedAlbums->count() > 0) ? $userAddedAlbums->pluck("album_id")->toArray() : [];
+
+        $albumIds = array_merge($userAlbums, $userAddedAlbums);
+
+        $posts = \App\Entities\Post::select("posts.*")->join('album_posts', 'post_id', '=', 'posts.id')
+            ->whereIn("album_id", $albumIds)
+            ->orderBy('posts.id', 'DESC')
+            ->distinct()->get();
 
         $postIds = $posts->pluck("id")->toArray();
         $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", $postIds);

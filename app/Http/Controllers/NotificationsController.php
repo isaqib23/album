@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Album;
 use App\Entities\AlbumFriend;
 use App\Entities\Friend;
 use App\Entities\Notification;
@@ -75,11 +76,18 @@ class NotificationsController extends BaseController
                 "user_id"   => $result->receiver,
                 "invited_by"   => $result->sender,
             ])->update(["status" => $request->input("status")]);
+            $use = \App\Models\User::where("id", $result->sender)->first();
+            $temp_id = ($request->input("status") == "rejected") ? env("FRIEND_REQUEST_REJECTED") : env("FRIEND_REQUEST_ACCEPTED");
+            sendPushNotification($use->device_UUID, $temp_id);
         }elseif ($result->type == "album_invitation"){
             AlbumFriend::where([
                 "user_id"   => $result->receiver,
                 "album_id"  => $result->taggable_id
             ])->update(["status" => $request->input("status")]);
+            $pos = Album::where("id", $result->taggable_id)->first();
+            $use = \App\Models\User::where("id", $pos->id)->first();
+            $temp_id = ($request->input("status") == "rejected") ? env("ALBUM_FRIEND_REJECTED") : env("ALBUM_FRIEND_ACCEPTED");
+            sendPushNotification($use->device_UUID, $temp_id);
         }
         return $this->sendResponse($result,"Notification updated");
     }
