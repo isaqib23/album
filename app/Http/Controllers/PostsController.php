@@ -547,7 +547,7 @@ class PostsController extends BaseController
     }
 
     public function getTagsGallary(Request $request){
-        $posts = Post::withAnyTags($request->input("tags"));
+        $posts = \App\Entities\Post::withAnyTags($request->input("tags"))->get();
         $postIds = $posts->pluck("id")->toArray();
         $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", $postIds);
 
