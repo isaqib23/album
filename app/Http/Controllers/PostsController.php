@@ -519,8 +519,26 @@ class PostsController extends BaseController
      * @return JsonResponse
      */
     public function getTopTags(Request $request){
+        $userAlbums = Album::where("created_by", \auth()->user()->id)->get();
+        $userAlbums = ($userAlbums->count() > 0) ? $userAlbums->pluck("id")->toArray() : [];
+
+        $userAddedAlbums = AlbumFriend::where([
+            "user_id"   => Auth::user()->id,
+            "status"    => "accepted"
+        ])->get();
+        $userAddedAlbums = ($userAddedAlbums->count() > 0) ? $userAddedAlbums->pluck("album_id")->toArray() : [];
+
+        $albumIds = array_merge($userAlbums, $userAddedAlbums);
+
+        $posts = \App\Entities\Post::select("posts.*")->join('album_posts', 'post_id', '=', 'posts.id')
+            ->whereIn("album_id", $albumIds)
+            ->orderBy('posts.id', 'DESC')
+            ->distinct()->get();
+
+        $postIds = $posts->pluck("id")->toArray();
+
         $postResource = new \App\Entities\Post();
-        $resutls = $postResource->scopePopularTags();
+        $resutls = $postResource->postsTags($postIds);
         return $this->sendResponse($resutls, "");
     }
 
