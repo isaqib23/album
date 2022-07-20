@@ -49,9 +49,10 @@ class UsersController extends BaseController
 
         $friends = \App\Models\User::query()
             ->where("id","<>", Auth::user()->id)
-            ->where('name', 'LIKE', "%{$searchTerm}%")
-            ->orWhere('email', 'LIKE', "%{$searchTerm}%")
-            ->get();
+            ->where(function($query) use ($searchTerm) {
+                $query->where('name', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('email', 'LIKE', "%{$searchTerm}%");
+            })->get();
 
         return $this->sendResponse(User::collection($friends),"");
     }
