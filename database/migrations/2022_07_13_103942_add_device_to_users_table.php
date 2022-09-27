@@ -14,7 +14,7 @@ class AddDeviceToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string("device_UUID")->after('status');
+            $table->string("device_UUID")->nullable()->after('status');
             $table->enum("device_type",["android", 'ios', 'wen'])->default("android")->after('device_UUID');
         });
     }
