@@ -565,10 +565,10 @@ class PostsController extends BaseController
     }
 
     public function getTagsGallary(Request $request){
+        $data = '"' . implode('", "', $request->input("tags")) . '"';
+        $tags = \DB::select("select * from tags where json_unquote(json_extract(name, '$.\"en\"')) IN (" . $data . ") and type is null");
+        $tags_Ids = implode(',', array_column($tags, 'id'));
         if($request->has("album_id")) {
-            $data = '"' . implode('", "', $request->input("tags")) . '"';
-            $tags = \DB::select("select * from tags where json_unquote(json_extract(name, '$.\"en\"')) IN (" . $data . ") and type is null");
-            $tags_Ids = implode(',', array_column($tags, 'id'));
             $posts = \DB::select('
                     select * from posts
                     join album_posts on album_posts.post_id = posts.id
@@ -580,7 +580,15 @@ class PostsController extends BaseController
                         ) and album_posts.album_id = ?', ["App\Entities\Post", $request->input("album_id")]);
             $postIds = array_column($posts, 'post_id');
         }else{
-            $posts = \App\Entities\Post::withAllTags($request->input("tags"))->get();
+            $posts = \DB::select('
+                    select * from posts
+                    join album_posts on album_posts.post_id = posts.id
+                        where exists (
+                        select * from tags
+                        inner join taggables on tags.id = taggables.tag_id
+                        where posts.id = taggables.taggable_id
+                        and taggables.taggable_type = ? and tags.id IN(' . $tags_Ids . ')
+                        )', ["App\Entities\Post"]);
             $postIds = $posts->pluck("id")->toArray();
         }
 
