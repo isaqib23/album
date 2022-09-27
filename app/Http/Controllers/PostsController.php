@@ -578,7 +578,6 @@ class PostsController extends BaseController
                         where posts.id = taggables.taggable_id
                         and taggables.taggable_type = ? and tags.id IN(' . $tags_Ids . ')
                         ) and album_posts.album_id = ?', ["App\Entities\Post", $request->input("album_id")]);
-            $postIds = array_column($posts, 'post_id');
         }else{
             $posts = \DB::select('
                     select * from posts
@@ -589,9 +588,8 @@ class PostsController extends BaseController
                         where posts.id = taggables.taggable_id
                         and taggables.taggable_type = ? and tags.id IN(' . $tags_Ids . ')
                         )', ["App\Entities\Post"]);
-            $postIds = $posts->pluck("id")->toArray();
         }
-
+        $postIds = array_column($posts, 'post_id');
         $images = $this->postImageRepositoryEloquent->findWhereIn("post_id", $postIds);
 
         return $this->sendResponse($images, "");
