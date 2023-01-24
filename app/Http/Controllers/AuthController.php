@@ -56,8 +56,7 @@ class AuthController extends BaseController
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $input["device_UUID"]   = " ";
-        $input["status"]   = "active";
-        
+
         $user = User::create($input);
 
         // Check invitation
@@ -71,7 +70,7 @@ class AuthController extends BaseController
         }
 
         // Send Confirmation Email
-        User::where("id",$user->id)->update(["status" => "pending", "email_verified_at" => date("Y-m-d H:i:s")]);
+        User::where("id",$user->id)->update(["status" => "active", "email_verified_at" => date("Y-m-d H:i:s")]);
         $emailBody = [
             "name"      => $user->name,
             "url"       => url('/confirmation_email/'.base64_encode($user->id))
