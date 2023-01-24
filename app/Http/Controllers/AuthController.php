@@ -37,7 +37,7 @@ class AuthController extends BaseController
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
-            'dob' => 'required',
+            'dob' => 'nullable',
             'photo' => 'required',
             "status" => "active"
         ]);
