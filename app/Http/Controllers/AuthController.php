@@ -39,7 +39,6 @@ class AuthController extends BaseController
             'password' => 'required',
             'dob' => 'nullable',
             'photo' => 'required',
-            "status" => "active"
         ]);
 
         if($validator->fails()){
@@ -57,7 +56,8 @@ class AuthController extends BaseController
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $input["device_UUID"]   = " ";
-
+        $input["status"]   = "active";
+        
         $user = User::create($input);
 
         // Check invitation
