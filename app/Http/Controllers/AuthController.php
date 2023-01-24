@@ -39,6 +39,7 @@ class AuthController extends BaseController
             'password' => 'required',
             'dob' => 'required',
             'photo' => 'required',
+            "status" => "active"
         ]);
 
         if($validator->fails()){
@@ -270,5 +271,10 @@ class AuthController extends BaseController
         $user->save();
 
         return $this->sendResponse($user, 'Password successfully changed!');
+    }
+
+    public function terms()
+    {
+        return view('terms');
     }
 }
