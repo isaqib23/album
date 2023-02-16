@@ -35,6 +35,7 @@ Route::post('reset-password', [AuthController::class, 'submit_forgot_password'])
 
 Route::get('/', [AdminAuthController::class, 'index'])->name('login');
 Route::get('/terms', [AuthController::class, 'terms'])->name('terms');
+Route::get('/support', [AuthController::class, 'support'])->name('support');
 Route::post('post-login', [AdminAuthController::class, 'postLogin'])->name('login_post');
 Route::post('logout', [AdminAuthController::class, 'admin_logout'])->name('logout');
 

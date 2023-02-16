@@ -276,4 +276,9 @@ class AuthController extends BaseController
     {
         return view('terms');
     }
+
+    public function support()
+    {
+        return view('support');
+    }
 }
