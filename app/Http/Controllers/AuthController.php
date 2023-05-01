@@ -134,7 +134,7 @@ class AuthController extends BaseController
             ->where('email', $request->email);
 
         if ($select->get()->count() == 0) {
-            return $this->sendError([], "Invalid Email");
+            return $this->sendError([], "Invalid Email", 422);
         }
 
         $token = \Illuminate\Support\Str::random(64);
