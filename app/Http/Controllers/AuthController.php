@@ -123,11 +123,18 @@ class AuthController extends BaseController
      */
     public function forgotPassword(Request $request){
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users'
+            'email' => 'required|email'
         ]);
 
         if($validator->fails()){
             return $this->sendError($validator->errors()->first(), $validator->errors());
+        }
+
+        $select = DB::table('users')
+            ->where('email', $request->email);
+
+        if ($select->get()->count() == 0) {
+            return $this->sendError([], "Invalid Email");
         }
 
         $token = \Illuminate\Support\Str::random(64);
